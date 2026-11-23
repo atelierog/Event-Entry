@@ -6,6 +6,51 @@
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{font-family:Inter,system-ui,Arial,sans-serif;color:#172033;background:#f4f6fa}*{box-sizing:border-box}body{margin:0}.top{background:#111827;color:white;padding:24px max(18px,calc((100% - 960px)/2))}.top small{color:#d6b77e;letter-spacing:.15em;text-transform:uppercase;font-weight:700}.top h1{margin:7px 0;font-size:28px}.top p{margin:0;color:#c4cad4}main{max-width:960px;margin:24px auto;padding:0 14px}.card{background:white;border:1px solid #e5e9f0;border-radius:14px;padding:20px;margin-bottom:16px;box-shadow:0 5px 18px #13203608}h2{font-size:17px;margin:0 0 6px}.hint{font-size:12px;color:#687386;margin:0 0 16px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.customer{display:grid;grid-template-columns:1.2fr 1fr auto;gap:12px;align-items:end}.field label{display:block;font-size:12px;font-weight:700;margin-bottom:7px}.field input,.search{width:100%;min-height:44px;padding:10px 12px;border:1px solid #d8deea;border-radius:9px;font:inherit}button{border:0;border-radius:9px;padding:0 16px;min-height:43px;font-weight:700;cursor:pointer}.add{background:#8e682d;color:white}.export{background:#18794e;color:white}.clear{background:#eef1f6;color:#344054}.del{background:#fff1f0;color:#b42318;min-height:30px;padding:0 10px}.toolbar{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;margin:16px 0}.actions{display:flex;gap:8px;flex-wrap:wrap}.search{width:230px;min-height:40px}.count{color:#687386;font-size:13px}.count b{font-size:20px;color:#172033}.tablewrap{overflow:auto;border:1px solid #e5e9f0;border-radius:9px}table{border-collapse:collapse;width:100%;min-width:520px}th,td{text-align:left;padding:12px 14px;font-size:13px;border-bottom:1px solid #e5e9f0}th{background:#f8f9fb;color:#566176;font-size:11px;text-transform:uppercase}#status{font-size:12px;color:#18794e;min-height:18px}.error{color:#b42318!important}.empty{text-align:center;color:#687386;padding:28px}.note{font-size:11px;color:#687386;line-height:1.5;margin-top:12px}@media(max-width:640px){main{margin-top:14px}.card{padding:15px}.grid,.customer{grid-template-columns:1fr}.customer button{width:100%}.actions{width:100%}.actions button,.search{flex:1;width:100%}}
+
+/* Mobile-first refinements */
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{min-width:320px}
+button,input{touch-action:manipulation}
+button{min-height:46px}
+input{font-size:16px}
+.top{padding:22px max(18px,calc((100% - 960px)/2))}
+main{width:100%}
+@media(max-width:640px){
+  .top{padding:22px 18px 24px}
+  .top h1{font-size:25px;line-height:1.2}
+  .top p{font-size:13px;line-height:1.5;margin-top:6px}
+  main{margin:12px auto 28px;padding:0 12px}
+  .card{padding:15px 13px;border-radius:13px;margin-bottom:12px}
+  h2{font-size:16px}
+  .hint{line-height:1.45;margin-bottom:13px}
+  .grid,.customer{grid-template-columns:minmax(0,1fr);gap:12px}
+  .field input{min-height:48px;border-radius:10px}
+  .customer button{width:100%;min-height:48px}
+  #status{margin:10px 0 0;line-height:1.4}
+  .toolbar{display:grid;grid-template-columns:1fr;gap:12px;margin:14px 0}
+  .count{font-size:13px}
+  .count b{font-size:22px}
+  .actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%}
+  .actions .search{grid-column:1/-1;width:100%;min-height:46px}
+  .actions button{width:100%;padding:0 8px;font-size:13px;min-height:46px}
+  .tablewrap{overflow:visible;border:0;border-radius:0}
+  table{width:100%;min-width:0;border-collapse:separate;border-spacing:0 9px}
+  thead{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  tbody tr{display:block;background:#fff;border:1px solid #e5e9f0;border-radius:11px;padding:5px 11px;box-shadow:0 2px 8px #13203608}
+  tbody td{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:9px 2px;border-bottom:1px solid #eef0f4;font-size:13px;overflow-wrap:anywhere}
+  tbody td:last-child{border-bottom:0}
+  tbody td:before{content:attr(data-label);font-size:11px;font-weight:700;color:#687386;text-transform:uppercase;letter-spacing:.03em;flex:0 0 38%}
+  tbody td:first-child{color:#687386}
+  tbody td.empty{display:block;text-align:center;padding:22px 8px;border:0}
+  tbody td.empty:before{content:none}
+  .del{min-height:38px;padding:0 14px}
+  .note{font-size:11px}
+}
+@media(min-width:641px) and (max-width:760px){
+  main{padding:0 18px}
+  .card{padding:17px}
+  .search{width:190px}
+}
 </style></head>
 <body><header class="top"><small>Event management</small><h1>Customer Register</h1><p>Add customer details and export the complete list to Excel.</p></header>
 <main>
@@ -21,5 +66,5 @@
 <p class="note">Data is stored only in this browser on this device. It does not sync to other devices. Download Excel backups regularly.</p></section>
 </main>
 <script>
-(()=>{const $=id=>document.getElementById(id),key='eventCustomerRegister_v1';let data={location:'',date:'',customers:[]};try{data={...data,...JSON.parse(localStorage.getItem(key)||'{}')}}catch(e){}$('loc').value=data.location||'';$('date').value=data.date||'';function save(){data.location=$('loc').value.trim();data.date=$('date').value;try{localStorage.setItem(key,JSON.stringify(data))}catch(e){msg('Browser storage is full. Download a backup.',true)}}function msg(t,e=false){$('status').textContent=t;$('status').classList.toggle('error',e)}function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}function render(){let q=$('search').value.trim().toLowerCase(),a=data.customers.map((c,i)=>({...c,i})).filter(c=>!q||c.name.toLowerCase().includes(q)||c.number.toLowerCase().includes(q));$('count').textContent=data.customers.length;$('rows').innerHTML=a.length?a.map(c=>'<tr><td>'+(c.i+1)+'</td><td>'+esc(c.name)+'</td><td>'+esc(c.number)+'</td><td><button class="del" data-i="'+c.i+'">Delete</button></td></tr>').join(''):'<tr><td class="empty" colspan="4">'+(data.customers.length?'No matching customers.':'No customers added yet.')+'</td></tr>'} $('loc').addEventListener('input',save);$('date').addEventListener('change',save);$('search').addEventListener('input',render);$('form').addEventListener('submit',e=>{e.preventDefault();let name=$('name').value.trim(),number=$('number').value.trim(),digits=number.replace(/\D/g,'').length;if(!$('loc').value.trim()||!$('date').value){msg('Enter event location and date first.',true);return}if(digits<7||digits>15){msg('Enter a valid number with 7–15 digits.',true);return}data.customers.push({name,number});save();render();$('form').reset();$('name').focus();msg('Customer added successfully.')});$('rows').addEventListener('click',e=>{let b=e.target.closest('[data-i]');if(!b)return;data.customers.splice(+b.dataset.i,1);save();render();msg('Customer removed.')});$('download').addEventListener('click',()=>{save();if(!data.location||!data.date||!data.customers.length){msg('Enter event details and add at least one customer.',true);return}let d=data.date.split('-').reverse().join('-'),sheet=[['Event Location',data.location],['Date',d],[],['Sl No.','Customer Name','Customer Number'],...data.customers.map((c,i)=>[i+1,c.name,c.number])],file='customer-register-'+data.date+'.xlsx';if(window.XLSX){let ws=XLSX.utils.aoa_to_sheet(sheet);ws['!cols']=[{wch:12},{wch:30},{wch:22}];ws['!merges']=[{s:{r:0,c:1},e:{r:0,c:2}},{s:{r:1,c:1},e:{r:1,c:2}}];let wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Customer Register');XLSX.writeFile(wb,file);msg('Excel downloaded.')}else{let csv=sheet.map(r=>r.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\r\n'),blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=file.replace('.xlsx','.csv');a.click();URL.revokeObjectURL(url);msg('Downloaded CSV file; it opens in Excel.')}});$('clear').addEventListener('click',()=>{if(data.customers.length&&confirm('Delete all customer entries?')){data.customers=[];save();render();msg('All entries cleared.')}});render()})();
+(()=>{const $=id=>document.getElementById(id),key='eventCustomerRegister_v1';let data={location:'',date:'',customers:[]};try{data={...data,...JSON.parse(localStorage.getItem(key)||'{}')}}catch(e){}$('loc').value=data.location||'';$('date').value=data.date||'';function save(){data.location=$('loc').value.trim();data.date=$('date').value;try{localStorage.setItem(key,JSON.stringify(data))}catch(e){msg('Browser storage is full. Download a backup.',true)}}function msg(t,e=false){$('status').textContent=t;$('status').classList.toggle('error',e)}function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}function render(){let q=$('search').value.trim().toLowerCase(),a=data.customers.map((c,i)=>({...c,i})).filter(c=>!q||c.name.toLowerCase().includes(q)||c.number.toLowerCase().includes(q));$('count').textContent=data.customers.length;$('rows').innerHTML=a.length?a.map(c=>'<tr><td data-label="Sl No.">'+(c.i+1)+'</td><td data-label="Customer name">'+esc(c.name)+'</td><td data-label="Customer number">'+esc(c.number)+'</td><td data-label="Action"><button class="del" data-i="'+c.i+'">Delete</button></td></tr>').join(''):'<tr><td class="empty" colspan="4">'+(data.customers.length?'No matching customers.':'No customers added yet.')+'</td></tr>'} $('loc').addEventListener('input',save);$('date').addEventListener('change',save);$('search').addEventListener('input',render);$('form').addEventListener('submit',e=>{e.preventDefault();let name=$('name').value.trim(),number=$('number').value.trim(),digits=number.replace(/\D/g,'').length;if(!$('loc').value.trim()||!$('date').value){msg('Enter event location and date first.',true);return}if(digits<7||digits>15){msg('Enter a valid number with 7–15 digits.',true);return}data.customers.push({name,number});save();render();$('form').reset();$('name').focus();msg('Customer added successfully.')});$('rows').addEventListener('click',e=>{let b=e.target.closest('[data-i]');if(!b)return;data.customers.splice(+b.dataset.i,1);save();render();msg('Customer removed.')});$('download').addEventListener('click',()=>{save();if(!data.location||!data.date||!data.customers.length){msg('Enter event details and add at least one customer.',true);return}let d=data.date.split('-').reverse().join('-'),sheet=[['Event Location',data.location],['Date',d],[],['Sl No.','Customer Name','Customer Number'],...data.customers.map((c,i)=>[i+1,c.name,c.number])],file='customer-register-'+data.date+'.xlsx';if(window.XLSX){let ws=XLSX.utils.aoa_to_sheet(sheet);ws['!cols']=[{wch:12},{wch:30},{wch:22}];ws['!merges']=[{s:{r:0,c:1},e:{r:0,c:2}},{s:{r:1,c:1},e:{r:1,c:2}}];let wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Customer Register');XLSX.writeFile(wb,file);msg('Excel downloaded.')}else{let csv=sheet.map(r=>r.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\r\n'),blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=file.replace('.xlsx','.csv');a.click();URL.revokeObjectURL(url);msg('Downloaded CSV file; it opens in Excel.')}});$('clear').addEventListener('click',()=>{if(data.customers.length&&confirm('Delete all customer entries?')){data.customers=[];save();render();msg('All entries cleared.')}});render()})();
 </script></body></html>
